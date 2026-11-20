@@ -12,8 +12,9 @@ import { createClient } from '@/lib/supabase/client';
 import { Card, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { formatEventDate } from '@/lib/utils/date';
-import { PaymentModal } from '@/components/PaymentModal';
 import { FeedbackModal } from '@/components/events/FeedbackModal';
+import { toast } from 'sonner';
+import { participationLabel } from '@/lib/event-display';
 
 type SupabaseEvent = Tables<'Event'> & {
   type: Enums<'EventType'>;
@@ -25,9 +26,6 @@ type SupabaseEvent = Tables<'Event'> & {
 const UpcomingEventItem = ({ event }: { event: SupabaseEvent }) => {
   const supabaseClient = createClient();
 
-  const [showPaymentModal, setShowPaymentModal] = useState(false);
-  const [registrationId, setRegistrationId] = useState<string | null>(null);
-  const [isRegistering, setIsRegistering] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
@@ -75,67 +73,6 @@ const UpcomingEventItem = ({ event }: { event: SupabaseEvent }) => {
     visible: { opacity: 1, y: 0 },
   };
 
-  const handleRegisterClick = async () => {
-    if (!currentUser) {
-      alert('Please login to register for events');
-      return;
-    }
-
-    try {
-      setIsRegistering(true);
-
-      const { data: existingReg, error: checkError } = await supabaseClient
-        .from('Registration')
-        .select('id')
-        .eq('eventId', event.id)
-        .eq('userId', currentUser.id)
-        .single();
-
-      if (checkError && checkError.code !== 'PGRST116') {
-        throw checkError;
-      }
-
-      if (existingReg) {
-        // Already registered — if fee is required, let them complete/redo payment
-        if (event.isFeeRequired && event.registrationFee && event.registrationFee > 0) {
-          setRegistrationId(existingReg.id);
-          setShowPaymentModal(true);
-        } else {
-          alert('You are already registered for this event');
-        }
-        return;
-      }
-
-      // Create registration
-      const { data: newReg, error: regError } = await supabaseClient
-        .from('Registration')
-        .insert([
-          {
-            eventId: event.id,
-            userId: currentUser.id,
-          },
-        ])
-        .select('id')
-        .single();
-
-      if (regError) throw regError;
-
-      setRegistrationId(newReg.id);
-
-      // Show payment modal if fee required
-      if (event.isFeeRequired && event.registrationFee && event.registrationFee > 0) {
-        setShowPaymentModal(true);
-      } else {
-        alert('Registration successful!');
-      }
-    } catch (error) {
-      console.error('Registration error:', error);
-      alert('Failed to register for event');
-    } finally {
-      setIsRegistering(false);
-    }
-  };
-
   return (
     <>
       <article data-fade className="group flex h-full flex-col">
@@ -171,6 +108,12 @@ const UpcomingEventItem = ({ event }: { event: SupabaseEvent }) => {
                 <dd className="mt-1 font-semibold">{event.location}</dd>
               </div>
             )}
+            {event.participationMode === 'TEAM' && (
+              <div>
+                <dt className="label text-muted-foreground">Who</dt>
+                <dd className="mt-1 font-semibold">{participationLabel(event)}</dd>
+              </div>
+            )}
             {event.registrationFee && event.registrationFee > 0 ? (
               <div>
                 <dt className="label text-muted-foreground">Fee</dt>
@@ -191,7 +134,7 @@ const UpcomingEventItem = ({ event }: { event: SupabaseEvent }) => {
                 type="button"
                 onClick={() => {
                   if (!currentUser) {
-                    alert('Please login to give feedback');
+                    toast.error('Sign in to give feedback.');
                     return;
                   }
                   setShowFeedbackModal(true);
@@ -201,33 +144,17 @@ const UpcomingEventItem = ({ event }: { event: SupabaseEvent }) => {
                 Give feedback
               </button>
             ) : (
-              <button
-                type="button"
-                onClick={handleRegisterClick}
-                disabled={isRegistering}
-                className="inline-flex h-12 w-full items-center justify-between bg-primary px-5 font-semibold text-primary-foreground transition-colors hover:bg-foreground hover:text-background disabled:cursor-wait disabled:opacity-70"
+              <Link
+                href={`/events/${event.id}/register`}
+                className="group/cta inline-flex h-12 w-full items-center justify-between bg-primary px-5 font-semibold text-primary-foreground transition-colors hover:bg-foreground hover:text-background"
               >
-                {isRegistering ? 'Registering…' : 'Register now'}
-                <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
-              </button>
+                Register now
+                <ArrowRight className="size-5 transition-transform group-hover/cta:translate-x-1" />
+              </Link>
             )}
           </div>
         </div>
       </article>
-
-      {/* PAYMENT MODAL */}
-      {showPaymentModal && registrationId && currentUser && (
-        <PaymentModal
-          eventId={event.id}
-          userId={currentUser.id}
-          registrationId={registrationId}
-          amount={event.registrationFee || 0}
-          eventName={event.name || 'Event'}
-          userName={currentUser.user_metadata?.name || currentUser.email}
-          userEmail={currentUser.email || ''}
-          onClose={() => setShowPaymentModal(false)}
-        />
-      )}
 
       {/* FEEDBACK MODAL */}
       {showFeedbackModal && currentUser && (

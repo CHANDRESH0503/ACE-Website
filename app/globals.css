@@ -545,3 +545,24 @@ html.is-preloading .survey *, html.is-preloading .survey *::before { animation-p
   .survey-col, .survey-row::before, .survey-cross, .survey-ruler { animation: none; }
   .survey-xh, .survey-ruler-tick { display: none; }
 }
+
+/* ===== Print (admin sign-in sheets) =====
+   Always print on white with ink text, whatever the screen theme. */
+@media print {
+  :root, .dark {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 30%;
+    --border: 0 0% 70%;
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
+    color-scheme: light;
+  }
+  @page { margin: 12mm; }
+  body { background: #fff; }
+  main { padding-top: 0 !important; }
+  .club-cursor-layer { display: none !important; }
+  tr { break-inside: avoid; }
+  thead { display: table-header-group; }
+}

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { ArrowUpRight, Loader2, LogOut, Settings, User as UserIcon } from "lucide-react";
+import { ArrowUpRight, ClipboardList, Loader2, LogOut, Settings, User as UserIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ToggleTheme } from "./toogle-theme";
 import { useAuth } from "@/components/context/AuthContext";
@@ -38,7 +38,7 @@ function initials(name?: string, email?: string) {
 
 export const Navbar = () => {
   const pathname = usePathname();
-  const { user, loading, login, logout } = useAuth();
+  const { user, loading, isAdmin, login, logout } = useAuth();
   const [open, setOpen] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -113,6 +113,14 @@ export const Navbar = () => {
                 Settings
               </Link>
             </DropdownMenuItem>
+            {isAdmin && (
+              <DropdownMenuItem asChild>
+                <Link href="/admin" className="cursor-pointer">
+                  <ClipboardList className="mr-2 size-4" />
+                  Event registrations
+                </Link>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => logout()} className="cursor-pointer">
               <LogOut className="mr-2 size-4" />
@@ -137,7 +145,7 @@ export const Navbar = () => {
     <>
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-50 transition-[transform,background-color,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          "fixed inset-x-0 top-0 z-50 print:hidden transition-[transform,background-color,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
           hidden && !open ? "-translate-y-full" : "translate-y-0",
           scrolled || open ? "border-b border-border bg-background" : "border-b border-transparent bg-transparent"
         )}
@@ -212,13 +220,13 @@ export const Navbar = () => {
         aria-hidden={!open}
         inert={!open}
         className={cn(
-          "fixed inset-0 z-40 flex flex-col bg-background px-5 pb-8 pt-24 transition-[clip-path] duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] sm:px-8 lg:hidden",
+          "fixed inset-0 z-40 flex flex-col bg-background print:hidden px-5 pb-8 pt-24 transition-[clip-path] duration-700 ease-[cubic-bezier(0.76,0,0.24,1)] sm:px-8 lg:hidden",
           open ? "[clip-path:inset(0_0_0_0)]" : "pointer-events-none [clip-path:inset(0_0_100%_0)]"
         )}
       >
         <nav aria-label="Mobile">
           <ul className="border-t border-border">
-            {[{ href: "/", label: "Home" }, ...routes].map((r, i) => (
+            {[{ href: "/", label: "Home" }, ...routes, ...(isAdmin ? [{ href: "/admin", label: "Admin" }] : [])].map((r, i) => (
               <li key={r.href} className="overflow-hidden border-b border-border">
                 <Link
                   href={r.href}

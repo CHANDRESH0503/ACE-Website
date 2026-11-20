@@ -19,7 +19,7 @@ const social = [
 
 export const FooterSection = () => {
   return (
-    <footer id="footer" className="overflow-hidden border-t border-border pt-16 sm:pt-24">
+    <footer id="footer" className="overflow-hidden print:hidden border-t border-border pt-16 sm:pt-24">
       <div className="mx-auto grid max-w-[1600px] gap-12 px-5 sm:px-8 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <Link href="/" className="inline-flex items-center gap-3" aria-label="ACE home">

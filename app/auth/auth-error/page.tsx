@@ -50,7 +50,7 @@ export default function AuthErrorPage() {
           </p>
         </CardContent>{" "}
         <CardFooter className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-8">
-          <Button onClick={login} className="w-full sm:w-auto">
+          <Button onClick={() => login('/')} className="w-full sm:w-auto">
             <LogIn className="mr-2 h-4 w-4" /> Try Again
           </Button>
           <Button variant="outline" asChild className="w-full sm:w-auto">

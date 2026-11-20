@@ -59,36 +59,57 @@ export type Database = {
       }
       Event: {
         Row: {
+          currentRegistrations: number | null
           description: string
+          endTime: string | null
           id: string
           imgUrl: string | null
+          isFeeRequired: boolean | null
           location: string
+          maxCapacity: number | null
           name: string
           organizer_info: string | null
+          participationMode: "INDIVIDUAL" | "TEAM"
+          registrationFee: number | null
           startTime: string
           status: Database["public"]["Enums"]["event_status"]
+          teamSizes: number[] | null
           type: Database["public"]["Enums"]["EventType"]
         }
         Insert: {
+          currentRegistrations?: number | null
           description: string
+          endTime?: string | null
           id?: string
           imgUrl?: string | null
+          isFeeRequired?: boolean | null
           location: string
+          maxCapacity?: number | null
           name: string
           organizer_info?: string | null
+          participationMode?: "INDIVIDUAL" | "TEAM"
+          registrationFee?: number | null
           startTime: string
           status?: Database["public"]["Enums"]["event_status"]
+          teamSizes?: number[] | null
           type: Database["public"]["Enums"]["EventType"]
         }
         Update: {
+          currentRegistrations?: number | null
           description?: string
+          endTime?: string | null
           id?: string
           imgUrl?: string | null
+          isFeeRequired?: boolean | null
           location?: string
+          maxCapacity?: number | null
           name?: string
           organizer_info?: string | null
+          participationMode?: "INDIVIDUAL" | "TEAM"
+          registrationFee?: number | null
           startTime?: string
           status?: Database["public"]["Enums"]["event_status"]
+          teamSizes?: number[] | null
           type?: Database["public"]["Enums"]["EventType"]
         }
         Relationships: []
@@ -98,24 +119,33 @@ export type Database = {
           attended: boolean | null
           eventId: string
           id: string
+          paymentId: string | null
+          paymentStatus: Database["public"]["Enums"]["PaymentStatus"] | null
           points: number | null
           registeredAt: string
+          registrationFee: number | null
           userId: string
         }
         Insert: {
           attended?: boolean | null
           eventId: string
           id?: string
+          paymentId?: string | null
+          paymentStatus?: Database["public"]["Enums"]["PaymentStatus"] | null
           points?: number | null
           registeredAt?: string
+          registrationFee?: number | null
           userId: string
         }
         Update: {
           attended?: boolean | null
           eventId?: string
           id?: string
+          paymentId?: string | null
+          paymentStatus?: Database["public"]["Enums"]["PaymentStatus"] | null
           points?: number | null
           registeredAt?: string
+          registrationFee?: number | null
           userId?: string
         }
         Relationships: [
@@ -131,6 +161,41 @@ export type Database = {
             columns: ["userId"]
             isOneToOne: false
             referencedRelation: "UserProfile"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      RegistrationTeam: {
+        Row: {
+          createdAt: string
+          eventId: string
+          members: Json
+          registrationId: string
+          teamName: string
+          teamSize: number
+        }
+        Insert: {
+          createdAt?: string
+          eventId: string
+          members: Json
+          registrationId: string
+          teamName: string
+          teamSize: number
+        }
+        Update: {
+          createdAt?: string
+          eventId?: string
+          members?: Json
+          registrationId?: string
+          teamName?: string
+          teamSize?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "RegistrationTeam_registrationId_fkey"
+            columns: ["registrationId"]
+            isOneToOne: true
+            referencedRelation: "Registration"
             referencedColumns: ["id"]
           },
         ]
@@ -243,6 +308,10 @@ export type Database = {
         Args: { user_email: string }
         Returns: boolean
       }
+      admin_event_registrant_emails: {
+        Args: { p_event_id: string }
+        Returns: { userId: string; email: string }[]
+      }
       create_new_user_profile: {
         Args: {
           p_user_id: string
@@ -261,6 +330,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: boolean
       }
+      register_for_event: {
+        Args: { p_event_id: string; p_team_name?: string | null; p_team_size?: number | null; p_members?: Json | null }
+        Returns: string
+      }
       remove_admin_user: {
         Args: { user_email: string }
         Returns: boolean
@@ -270,6 +343,7 @@ export type Database = {
       BadgeType: "MANUAL" | "AUTOMATIC"
       event_status: "OPEN" | "CLOSED" | "DONE" | "CANCELLED"
       EventType: "CONTEST" | "WORKSHOP" | "TALK"
+      PaymentStatus: "pending" | "completed" | "failed" | "refunded"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -388,6 +462,7 @@ export const Constants = {
       BadgeType: ["MANUAL", "AUTOMATIC"],
       event_status: ["OPEN", "CLOSED", "DONE", "CANCELLED"],
       EventType: ["CONTEST", "WORKSHOP", "TALK"],
+      PaymentStatus: ["pending", "completed", "failed", "refunded"],
     },
   },
 } as const

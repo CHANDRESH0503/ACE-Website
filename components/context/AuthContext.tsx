@@ -9,7 +9,10 @@ interface AuthContextType {
   supabase: SupabaseClient;
   user: User | null;
   loading: boolean;
-  login: () => Promise<void>;
+  /** True when the signed-in user is flagged in userAdmins. UI hint only; pages re-check on the server. */
+  isAdmin: boolean;
+  /** Signs in with Google and returns to `next` (default: the current page). */
+  login: (next?: string) => Promise<void>;
   logout: () => Promise<void>;
 }
 
@@ -23,6 +26,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const supabase = createClient();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   useEffect(() => {
     let isMounted = true;   
     const getInitialSession = async () => {
@@ -60,12 +64,27 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     };
   }, [supabase]);
 
-  const login = async () => {
+  useEffect(() => {
+    if (!user) {
+      setIsAdmin(false);
+      return;
+    }
+    let active = true;
+    supabase.rpc('is_admin').then(({ data, error }) => {
+      if (active) setIsAdmin(!error && data === true);
+    });
+    return () => {
+      active = false;
+    };
+  }, [supabase, user?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const login = async (next?: string) => {
     setLoading(true);
+    const back = next ?? `${window.location.pathname}${window.location.search}`;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(back)}`,
       },
     });
     if (error) {
@@ -85,7 +104,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setLoading(false);
   };
   return (
-    <AuthContext.Provider value={{ supabase, user, loading, login, logout }}>
+    <AuthContext.Provider value={{ supabase, user, loading, isAdmin, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

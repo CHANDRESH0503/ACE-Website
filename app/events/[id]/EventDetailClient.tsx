@@ -4,15 +4,11 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/components/context/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from '@/components/ui/dialog';
-import { toast } from 'sonner';
 import { Loader } from '@/components/ui/loader';
-import type { Tables, TablesInsert } from '@/lib/supabase/database.types';
+import type { Tables } from '@/lib/supabase/database.types';
 import { createClient } from '@/lib/supabase/client';
-import { ArrowLeft, ArrowUpRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { participationLabel } from '@/lib/event-display';
 
 export type ParticipantWithPoints = Tables<'PublicUserProfile'> & {
   points: number | null;
@@ -23,8 +19,6 @@ interface EventDetailClientProps {
   initialParticipants: ParticipantWithPoints[];
   eventId: string;
 }
-
-const isValidContactNumber = (number: string): boolean => /^\d{10}$/.test(number);
 
 const formatDate = (dateString?: string | null) => {
   if (!dateString) return 'N/A';
@@ -40,145 +34,28 @@ const formatDate = (dateString?: string | null) => {
 
 export default function EventDetailClient({ initialEvent, initialParticipants, eventId }: EventDetailClientProps) {
   const supabaseClient = createClient();
-  const { user: authUser, supabase, loading: authLoading, login } = useAuth();
+  const { user: authUser, supabase, loading: authLoading } = useAuth();
 
   const [event] = useState<Tables<'Event'> | null>(initialEvent);
-  const [participants, setParticipants] = useState<ParticipantWithPoints[]>(initialParticipants);
-  const [userProfile, setUserProfile] = useState<Tables<'UserProfile'> | null>(null);
+  const [participants] = useState<ParticipantWithPoints[]>(initialParticipants);
   const [isRegistered, setIsRegistered] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [contactModal, setContactModal] = useState({ isOpen: false, contactNumber: '' });
-  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const isEventCompleted = event?.status === 'DONE';
   const canRegister = event?.status === 'OPEN';
   const leaderboardData = isEventCompleted ? participants : [];
 
-  // Fetch user profile and check registration status
+  // Is the signed-in member already registered?
   useEffect(() => {
     if (!authUser || !supabase || authLoading) return;
-
-    const fetchUserData = async () => {
-      const [profileResponse, registrationResponse] = await Promise.all([
-        supabase.from('UserProfile').select('*').eq('id', authUser.id).single(),
-        supabase.from('Registration').select('id').eq('userId', authUser.id).eq('eventId', eventId).maybeSingle()
-      ]);
-
-      if (!profileResponse.error) {
-        setUserProfile(profileResponse.data);
-        setContactModal(prev => ({ ...prev, contactNumber: profileResponse.data?.contactNumber || '' }));
-      }
-
-      if (!registrationResponse.error) {
-        setIsRegistered(!!registrationResponse.data);
-      }
-    };
-
-    fetchUserData();
+    supabase
+      .from('Registration')
+      .select('id')
+      .eq('userId', authUser.id)
+      .eq('eventId', eventId)
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (!error) setIsRegistered(!!data);
+      });
   }, [authUser, supabase, authLoading, eventId]);
-
-  const handleRegister = async () => {
-    if (!authUser || !userProfile || !event || !supabase) {
-      toast.error("Please log in to register.");
-      return;
-    }
-
-    // Check if contact number is needed
-    if (!userProfile.contactNumber && !contactModal.contactNumber.trim()) {
-      setContactModal({ ...contactModal, isOpen: true });
-      return;
-    }
-
-    setShowConfirmDialog(true);
-  };
-
-  const executeRegister = async () => {
-    if (!authUser || !event || !supabase) return;
-
-    setIsSubmitting(true);
-    setShowConfirmDialog(false);
-
-    try {      // Update contact number if needed
-      let updatedContactNumber = userProfile?.contactNumber;
-      if (contactModal.contactNumber.trim() && contactModal.contactNumber.trim() !== userProfile?.contactNumber) {
-        const { error: updateError } = await supabase
-          .from('UserProfile')
-          .update({ contactNumber: contactModal.contactNumber.trim() })
-          .eq('id', authUser.id);
-
-        if (updateError) throw new Error("Failed to update contact number");
-        
-        updatedContactNumber = contactModal.contactNumber.trim();
-        setUserProfile(prev => prev ? { ...prev, contactNumber: updatedContactNumber! } : null);
-      }
-
-      // Register for event
-      const registrationPayload: TablesInsert<'Registration'> = {
-        eventId: event.id,
-        userId: authUser.id,
-        points: null,
-      };
-
-      const { error: registrationError } = await supabase
-        .from('Registration')
-        .insert(registrationPayload);
-
-      if (registrationError) throw new Error(registrationError.message);
-
-      toast.success("Successfully registered for the event!");
-      setIsRegistered(true);
-      setContactModal({ ...contactModal, isOpen: false });        // Add to participants list
-        if (userProfile) {
-          const newParticipant: ParticipantWithPoints = {
-            id: userProfile.id,
-            name: userProfile.name,
-            department: userProfile.department,
-            year: userProfile.year,
-            currentRating: userProfile.currentRating,
-            points: null,
-          };
-          setParticipants(prev => [...prev, newParticipant]);
-        }
-    } catch (error: any) {
-      toast.error(error.message || "Registration failed. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleContactSubmit = async () => {
-    const trimmedContactNumber = contactModal.contactNumber.trim();
-
-    if (!trimmedContactNumber) {
-      toast.error("Contact number cannot be empty.");
-      return;
-    }
-
-    if (!isValidContactNumber(trimmedContactNumber)) {
-      toast.error("Please enter a valid 10-digit contact number.");
-      return;
-    }
-
-    if (!authUser || !supabase) {
-      toast.error("User not authenticated.");
-      return;
-    }
-
-    setIsSubmitting(true);
-    const { error } = await supabase
-      .from('UserProfile')
-      .update({ contactNumber: trimmedContactNumber })
-      .eq('id', authUser.id);
-
-    setIsSubmitting(false);
-
-    if (error) {
-      toast.error("Failed to update contact number.");
-    } else {
-      toast.success("Contact number updated. Please register again.");
-      setUserProfile(prev => prev ? { ...prev, contactNumber: trimmedContactNumber } : null);
-      setContactModal({ contactNumber: trimmedContactNumber, isOpen: false });
-    }
-  };
 
   const imageContainerClass = isEventCompleted ? "aspect-video" : "aspect-4/5";
 
@@ -190,15 +67,24 @@ export default function EventDetailClient({ initialEvent, initialParticipants, e
     if (!canRegister) {
       return <span className={`${base} border border-border text-muted-foreground`}>Registration closed</span>;
     }
+    if (isRegistered) {
+      return (
+        <Link
+          href={`/events/${event!.id}/register`}
+          className={`group ${base} border border-foreground transition-colors hover:bg-foreground hover:text-background`}
+        >
+          You&rsquo;re registered
+          <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
+        </Link>
+      );
+    }
     return (
       <Link
-        href="https://docs.google.com/forms/d/e/1FAIpQLSfdMp0IbymLZdIOaTZ4a5aWaJsDS6iPi6okXhuajl9tz4QZ6g/viewform?usp=send_form"
-        target="_blank"
-        rel="noopener noreferrer"
+        href={`/events/${event!.id}/register`}
         className={`group ${base} bg-primary text-primary-foreground transition-colors hover:bg-foreground hover:text-background`}
       >
         Register for this event
-        <ArrowUpRight className="size-5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+        <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
       </Link>
     );
   };
@@ -301,9 +187,10 @@ export default function EventDetailClient({ initialEvent, initialParticipants, e
               ["Date & time", formatDate(event.startTime)],
               ["Venue", event.location],
               ["Format", typeName],
+              ["Participation", participationLabel(event)],
               ["Status", statusName],
             ].map(([k, v]) => (
-              <div key={k} className="border-b border-border py-5 sm:odd:pr-6">
+              <div key={k} className="border-b border-border py-5 sm:odd:pr-6 sm:last:odd:col-span-2">
                 <dt className="label text-muted-foreground">{k}</dt>
                 <dd className="mt-2 text-lg font-semibold">{v}</dd>
               </div>
@@ -325,58 +212,6 @@ export default function EventDetailClient({ initialEvent, initialParticipants, e
         </div>
       </div>
 
-      {/* Contact Modal */}
-      <Dialog open={contactModal.isOpen} onOpenChange={(open) => setContactModal({ ...contactModal, isOpen: open })}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Update Contact Number</DialogTitle>
-          </DialogHeader>
-          <div className="py-4">
-            <p className="mb-4 text-sm text-muted-foreground">
-              To register for this event, please provide your contact number.
-            </p>
-            <Label htmlFor="contact-input">Contact Number</Label>
-            <Input
-              id="contact-input"
-              type="tel"
-              value={contactModal.contactNumber}
-              onChange={(e) => setContactModal({ ...contactModal, contactNumber: e.target.value })}
-              placeholder="Enter your contact number"
-              className="mt-1"
-            />
-          </div>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline" onClick={() => setContactModal({ ...contactModal, isOpen: false })}>Cancel</Button>
-            </DialogClose>
-            <Button onClick={handleContactSubmit} disabled={isSubmitting}>
-              {isSubmitting ? <Loader /> : 'Save and Continue'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Registration Confirmation Modal */}
-      <Dialog open={showConfirmDialog} onOpenChange={setShowConfirmDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Confirm Registration</DialogTitle>
-          </DialogHeader>
-          <div className="py-4">
-            <p className="text-sm text-muted-foreground">
-              Are you sure you want to register for {event?.name}?
-            </p>
-          </div>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline" onClick={() => setShowConfirmDialog(false)} disabled={isSubmitting}>Cancel</Button>
-            </DialogClose>
-            <Button onClick={executeRegister} disabled={isSubmitting}>
-              {isSubmitting ? <Loader /> : 'Confirm Registration'}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
