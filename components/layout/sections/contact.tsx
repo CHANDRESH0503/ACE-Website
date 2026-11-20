@@ -168,8 +168,8 @@ function JoinBlock() {
     <div>
       <p className="max-w-md text-lg leading-snug text-background/80">
         {user
-          ? "You're signed in. Register for events and collect badges from your profile."
-          : "Sign in with your SASTRA Google account to register for events and start collecting badges."}
+          ? "You're signed in. Register for events and track them from your profile."
+          : "Sign in with your SASTRA Google account to register for events and track them from your profile."}
       </p>
       {user ? (
         <a

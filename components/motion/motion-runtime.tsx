@@ -63,11 +63,13 @@ export function MotionRuntime() {
   // Hero exit: the hero copy drifts up and fades as the page scrolls away.
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const el = document.querySelector<HTMLElement>("[data-exit]");
-    if (!el) return;
     let raf = 0;
     const update = () => {
       raf = 0;
+      // Looked up on every frame: the hero streams in (app/loading.tsx) and can
+      // mount after this effect has run.
+      const el = document.querySelector<HTMLElement>("[data-exit]");
+      if (!el) return;
       const vh = window.innerHeight;
       const p = Math.min(1, Math.max(0, window.scrollY / vh));
       el.style.transform = p ? `translate3d(0, ${-p * 18}vh, 0)` : "";

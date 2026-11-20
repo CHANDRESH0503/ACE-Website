@@ -29,7 +29,7 @@ export function OpenEvents() {
         <p className="mt-3 max-w-md text-muted-foreground">
           {status === "error"
             ? "The full events page may have more. Try again in a moment."
-            : "New events land here first. Sign in so your registrations, attendance and badges are tracked when they do."}
+            : "New events land here first. Sign in so your registrations and attendance are tracked when they do."}
         </p>
         <Link
           href="/events"

@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { isUuid } from '@/lib/api-auth';
 import RegistrationForm, { type RegistrationState } from './RegistrationForm';
 import type { TeamMember } from '@/lib/event-display';
+import { fetchTeamMemberships } from '@/lib/team-membership';
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -50,6 +51,9 @@ export default async function RegisterPage({ params }: Props) {
           .maybeSingle()
       : { data: null };
 
+    // Not registered themselves: a teammate may have listed their register number.
+    const [teammateOf] = !registration && profile ? await fetchTeamMemberships(supabase, user.id, id) : [];
+
     state = profile
       ? {
           kind: 'member',
@@ -57,6 +61,7 @@ export default async function RegisterPage({ params }: Props) {
           profile,
           registration: registration ?? null,
           team: team ? { name: team.teamName, size: team.teamSize, members: (team.members as TeamMember[]) ?? [] } : null,
+          teammateOf: teammateOf ?? null,
         }
       : { kind: 'no-profile', email: user.email ?? '' };
   }

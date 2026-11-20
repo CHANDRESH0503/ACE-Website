@@ -9,30 +9,6 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      Badge: {
-        Row: {
-          description: string
-          iconUrl: string
-          id: string
-          name: string
-          type: Database["public"]["Enums"]["BadgeType"]
-        }
-        Insert: {
-          description: string
-          iconUrl: string
-          id?: string
-          name: string
-          type?: Database["public"]["Enums"]["BadgeType"]
-        }
-        Update: {
-          description?: string
-          iconUrl?: string
-          id?: string
-          name?: string
-          type?: Database["public"]["Enums"]["BadgeType"]
-        }
-        Relationships: []
-      }
       ContactMessage: {
         Row: {
           createdAt: string
@@ -223,42 +199,6 @@ export type Database = {
           },
         ]
       }
-      UserBadge: {
-        Row: {
-          badgeId: string
-          earnedAt: string
-          id: string
-          userId: string
-        }
-        Insert: {
-          badgeId: string
-          earnedAt?: string
-          id?: string
-          userId: string
-        }
-        Update: {
-          badgeId?: string
-          earnedAt?: string
-          id?: string
-          userId?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "UserBadge_badgeId_fkey"
-            columns: ["badgeId"]
-            isOneToOne: false
-            referencedRelation: "Badge"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "UserBadge_userId_fkey"
-            columns: ["userId"]
-            isOneToOne: false
-            referencedRelation: "UserProfile"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       UserProfile: {
         Row: {
           contactNumber: string | null
@@ -334,13 +274,30 @@ export type Database = {
         Args: { p_event_id: string; p_team_name?: string | null; p_team_size?: number | null; p_members?: Json | null }
         Returns: string
       }
+      team_memberships: {
+        Args: { p_user_id: string; p_event_id?: string | null }
+        Returns: {
+          eventId: string
+          registrationId: string
+          teamName: string
+          teamSize: number
+          leadId: string
+          leadName: string | null
+          memberNames: string[] | null
+          registeredAt: string
+          paymentStatus: string | null
+        }[]
+      }
+      is_team_member: {
+        Args: { p_event_id: string; p_user_id: string }
+        Returns: boolean
+      }
       remove_admin_user: {
         Args: { user_email: string }
         Returns: boolean
       }
     }
     Enums: {
-      BadgeType: "MANUAL" | "AUTOMATIC"
       event_status: "OPEN" | "CLOSED" | "DONE" | "CANCELLED"
       EventType: "CONTEST" | "WORKSHOP" | "TALK"
       PaymentStatus: "pending" | "completed" | "failed" | "refunded"
@@ -459,7 +416,6 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      BadgeType: ["MANUAL", "AUTOMATIC"],
       event_status: ["OPEN", "CLOSED", "DONE", "CANCELLED"],
       EventType: ["CONTEST", "WORKSHOP", "TALK"],
       PaymentStatus: ["pending", "completed", "failed", "refunded"],

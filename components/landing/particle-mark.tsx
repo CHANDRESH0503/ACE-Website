@@ -131,6 +131,25 @@ const AMB_FRAG = /* glsl */ `
   }
 `;
 
+/**
+ * An element's box relative to `host`, from layout offsets (CSS transforms on
+ * the element or its ancestors are ignored).
+ */
+function layoutBox(el: HTMLElement, host: HTMLElement) {
+  const origin = host.offsetParent;
+  let left = 0;
+  let top = 0;
+  let node: HTMLElement | null = el;
+  while (node && node !== origin) {
+    left += node.offsetLeft;
+    top += node.offsetTop;
+    node = node.offsetParent as HTMLElement | null;
+  }
+  left -= host.offsetLeft;
+  top -= host.offsetTop;
+  return { left, top, width: el.offsetWidth, height: el.offsetHeight, bottom: top + el.offsetHeight };
+}
+
 function cssColor(varName: string): THREE.Color {
   const raw = getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
   // tokens are "H S% L%" triplets
@@ -316,19 +335,21 @@ export function ParticleMark({ className }: { className?: string }) {
       const wpp = visibleH / h;
       ambUniforms.uHalf.value.set((visibleH * camera.aspect) / 2, visibleH / 2);
       // Field lives between the corner data and the end of the headline.
+      // Positions come from layout offsets, not getBoundingClientRect: the hero
+      // copy ([data-exit]) is translated up while the page is scrolled, and a
+      // resize fired mid-scroll (mobile toolbars, the footer) would otherwise
+      // bake that offset in and leave the mark too high back at the top.
       const sec = host.parentElement;
       const corner = sec?.querySelector<HTMLElement>("[data-field-top]");
       const title = sec?.querySelector<HTMLElement>("#hero-title");
-      const hostTop = host.getBoundingClientRect().top;
       const toNdc = (px: number) => 1 - (2 * px) / h;
-      if (corner) ambUniforms.uHigh.value = toNdc(corner.getBoundingClientRect().bottom - hostTop + 8);
-      if (title) ambUniforms.uLow.value = toNdc(title.getBoundingClientRect().bottom - hostTop - 20);
+      if (corner) ambUniforms.uHigh.value = toNdc(layoutBox(corner, host).bottom + 8);
+      if (title) ambUniforms.uLow.value = toNdc(layoutBox(title, host).bottom - 20);
       const slot = host.parentElement?.querySelector<HTMLElement>("[data-mark-slot]");
-      const hr = host.getBoundingClientRect();
       if (slot) {
-        const r = slot.getBoundingClientRect();
-        const cx = r.left - hr.left + r.width / 2;
-        const cy = r.top - hr.top + r.height / 2;
+        const r = layoutBox(slot, host);
+        const cx = r.left + r.width / 2;
+        const cy = r.top + r.height / 2;
         points.scale.setScalar((Math.min(r.width, r.height) / 2) * wpp);
         points.position.set((cx - w / 2) * wpp, -(cy - h / 2) * wpp, 0);
       } else {

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
 import { OpenEvents } from "@/components/landing/open-events";
 import { VelocityMarquee } from "@/components/landing/velocity-marquee";
 
@@ -72,28 +71,6 @@ export const EventsSection = () => {
             </Link>
           </div>
           <OpenEvents />
-
-          <div
-            data-fade
-            className="mt-16 grid gap-6 border-y border-foreground py-10 sm:grid-cols-[1fr_auto] sm:items-end"
-          >
-            <div>
-              <p className="text-[clamp(2rem,4vw,3.25rem)] font-bold leading-[0.95] tracking-[-0.04em] [font-stretch:110%]">
-                Participation is proof.
-              </p>
-              <p className="mt-4 max-w-md text-muted-foreground">
-                Events you attend can earn badges on your public ACE profile: a record of what you&apos;ve
-                done that you can share anywhere.
-              </p>
-            </div>
-            <Link
-              href="/badges"
-              className="group inline-flex h-12 items-center gap-4 bg-primary px-5 font-semibold text-primary-foreground transition-colors hover:bg-foreground hover:text-background"
-            >
-              See the badges
-              <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
-            </Link>
-          </div>
         </div>
       </div>
     </section>

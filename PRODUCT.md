@@ -8,24 +8,24 @@ web
 
 ## Users
 
-**Primary: current ACE members.** These are School of Computing students at SASTRA University (Thanjavur). Most use the site on their phones. They come to find upcoming events, register (and pay when an event needs it), give feedback afterwards, and see the badges and points they have earned. The site is mainly a tool they come back to, not a brochure.
+**Primary: current ACE members.** These are School of Computing students at SASTRA University (Thanjavur). Most use the site on their phones. They come to find upcoming events, register (and pay when an event needs it), give feedback afterwards, and see the events and points on their profile. The site is mainly a tool they come back to, not a brochure.
 
 **Secondary:**
 - **Prospective members.** These are 1st-year students (non-tech cluster only) and 2nd- and 3rd-year SoC students. They decide whether to join and apply to a cluster during recruitment.
-- **Admins.** ACE core and leads, flagged in `userAdmins`, who run events and award badges.
+- **Admins.** ACE core and leads, flagged in `userAdmins`, who run events.
 
 ## Product Purpose
 
 ACE (Association of Computing Engineers) is a student-run club in SASTRA's School of Computing. It promotes excellence in computing education and research through events, workshops, seminars and specialised clusters. The site is the club's operating surface:
 
 - the public home page explains ACE and recruits members
-- the signed-in app handles events, registration, payment, attendance, feedback and badges
+- the signed-in app handles events, registration, payment, attendance and feedback
 
-Success means members use the site without being pushed: events fill through it rather than through scattered forms, and members treat their profile and badges as a record worth sharing.
+Success means members use the site without being pushed: events fill through it rather than through scattered forms, and members treat their profile as a record worth sharing.
 
 ## Positioning
 
-The value is the combination, and no single mechanism leads. Discovering, registering for, paying for and giving feedback on events all happen in one place. Clear cluster pathways give each student a track to grow in, with peers and faculty. Badges and a public profile turn participation into a verifiable, shareable record. A generic club page or an Instagram account can't do all three together.
+The value is the combination, and no single mechanism leads. Discovering, registering for, paying for and giving feedback on events all happen in one place. Clear cluster pathways give each student a track to grow in, with peers and faculty. A public profile turns participation into a shareable record. A generic club page or an Instagram account can't do all three together.
 
 ## Operating Context
 
@@ -34,8 +34,9 @@ The value is the combination, and no single mechanism leads. Discovering, regist
 - Events have a type (CONTEST, WORKSHOP or TALK) and a status (OPEN, CLOSED, DONE or CANCELLED). Each has a start time, location, image and organiser info.
 - A registration tracks whether the member attended and the points they earned.
 - Paid events go through Razorpay, using a payment modal and a webhook.
-- Badges are MANUAL (awarded by an admin) or AUTOMATIC. A member's earned badges show at `/user/[userId]`, and each badge has its own page.
+- A member's upcoming events, event history and points show at `/user/[userId]`, including team events a teammate registered them for. Badges were removed on 2026-11-20 and are not part of the product.
 - Clusters include Web Dev, App Dev, AI/ML, Cybersecurity, IoT & Embedded, Competitive Programming, OpCon & PR, Networks, Game Dev, Content Writing, Video, CSI and others. Recruitment applications currently go to external Google Forms.
+- `/products` showcases software ACE members have shipped, from `lib/products.ts`. The first is UniFy (Android and iOS); the second is the Carpediem cultural fest website. The page shows store ratings with the date they were read; no download counts and no app screenshots, by the club's choice.
 - The home page covers about, mission, principles, team (core and leads), FAQ, and a contact form that writes to `ContactMessage`.
 
 ## Capabilities and Constraints
@@ -44,7 +45,7 @@ The value is the combination, and no single mechanism leads. Discovering, regist
 - Login must stay limited to the SASTRA domain.
 - Light and dark themes must both stay fully supported. The site currently follows the system theme by default.
 - Mobile-first: phones are the primary viewport.
-- Terminology: "ACE", "ACE SASTRA", "Association of Computing Engineers", "clusters", "core", "leads", "badges" and "points/rating".
+- Terminology: "ACE", "ACE SASTRA", "Association of Computing Engineers", "clusters", "core", "leads" and "points/rating".
 
 ## Brand Commitments
 
@@ -59,14 +60,14 @@ The value is the combination, and no single mechanism leads. Discovering, regist
 - Cluster artwork at `public/images/Clusters/`.
 - A hero background video at `public/videos/hero-background.webm`.
 - Real copy for the mission, principles and FAQ in `components/layout/sections/`.
-- Real event, badge and registration data lives in Supabase.
+- Real event and registration data lives in Supabase.
 - There are no testimonials, member counts, event statistics, sponsor logos or press coverage in the repo. Future work must not invent them.
 
 ## Product Principles
 
-1. **Members first.** Optimise the repeat member's paths (find an event, register, pay, check badges) before the brochure.
+1. **Members first.** Optimise the repeat member's paths (find an event, register, pay, check their profile) before the brochure.
 2. **One place, no detours.** Every step of an event's lifecycle should happen on the site, not in scattered forms and chats.
-3. **Participation is proof.** Badges, points and profiles should feel earned and be worth sharing outside the site.
+3. **Participation is proof.** Points and profiles should feel earned and be worth sharing outside the site.
 4. **Thumb-ready.** Design for a student on a phone, often between classes, then scale up.
 5. **Stay truthful.** Show real people, real events and real numbers, or show nothing.
 

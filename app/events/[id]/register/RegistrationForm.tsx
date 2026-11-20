@@ -9,6 +9,7 @@ import { useAuth } from '@/components/context/AuthContext';
 import { PaymentModal } from '@/components/PaymentModal';
 import type { Tables } from '@/lib/supabase/database.types';
 import { cn } from '@/lib/utils';
+import type { TeamMembership } from '@/lib/team-membership';
 import {
   EVENT_TYPE_NAME,
   REG_NO_RE,
@@ -34,7 +35,15 @@ export type Team = { name: string; size: number; members: TeamMember[] };
 export type RegistrationState =
   | { kind: 'signed-out' }
   | { kind: 'no-profile'; email: string }
-  | { kind: 'member'; email: string; profile: Profile; registration: Registration | null; team: Team | null };
+  | {
+      kind: 'member';
+      email: string;
+      profile: Profile;
+      registration: Registration | null;
+      team: Team | null;
+      /** Set when another member's team lists this member's register number. */
+      teammateOf?: TeamMembership | null;
+    };
 
 interface Props {
   event: Tables<'Event'>;
@@ -92,6 +101,7 @@ export default function RegistrationForm({ event, taken, state }: Props) {
   const isTeam = sizes.length > 0;
 
   const [registration, setRegistration] = useState<Registration | null>(member?.registration ?? null);
+  const teammateOf = member?.registration ? null : member?.teammateOf ?? null;
   const [team, setTeam] = useState<Team | null>(member?.team ?? null);
   const [mobile, setMobile] = useState(member?.profile.contactNumber ?? '');
   const [teamSize, setTeamSize] = useState<number>(sizes[0] ?? 1);
@@ -247,7 +257,7 @@ export default function RegistrationForm({ event, taken, state }: Props) {
 
       <header className="mt-6 border-b border-border pb-8 sm:mt-8 sm:pb-10">
         <h1 className="max-w-[20ch] text-balance text-[clamp(2.25rem,5.5vw,5rem)] font-extrabold leading-[0.92] tracking-[-0.04em] [font-stretch:110%]">
-          {registration ? (
+          {registration || teammateOf ? (
             <>
               <span className="text-primary">You&rsquo;re in.</span> {event.name.trim()}
             </>
@@ -343,6 +353,11 @@ export default function RegistrationForm({ event, taken, state }: Props) {
             </section>
           )}
 
+          {/* Confirmation for a member their teammate registered */}
+          {teammateOf && member && (
+            <TeammateConfirmation event={event} membership={teammateOf} selfName={member.profile.name} fee={fee} />
+          )}
+
           {/* Event facts */}
           <dl className="grid grid-cols-2 border-t border-border">
             {facts.map(([k, v], i) => (
@@ -397,7 +412,7 @@ export default function RegistrationForm({ event, taken, state }: Props) {
           )}
 
           {/* Form / gate */}
-          {!registration && (
+          {!registration && !teammateOf && (
             <section aria-labelledby="form-heading" className="mt-14 border-t border-foreground pt-8">
               <h2 id="form-heading" className="text-2xl font-semibold tracking-[-0.02em]">
                 {isOpen && !isFull ? (isTeam && state.kind === 'member' ? 'Your team' : 'Your details') : 'Registration'}
@@ -686,6 +701,71 @@ function LockedField({ label, value, mono, className }: { label: string; value: 
         <Lock aria-label="From your profile" className="size-3.5 shrink-0 text-muted-foreground" />
       </p>
     </div>
+  );
+}
+
+function TeammateConfirmation({
+  event,
+  membership,
+  selfName,
+  fee,
+}: {
+  event: Tables<'Event'>;
+  membership: TeamMembership;
+  selfName: string;
+  fee: number;
+}) {
+  const paid = membership.paymentStatus === 'completed';
+  const lead = membership.leadName ?? 'Your team lead';
+  const roster = [
+    { name: lead, note: 'lead' },
+    ...(membership.memberNames ?? []).map((name) => ({ name, note: name === selfName ? 'you' : '' })),
+  ];
+
+  return (
+    <section aria-live="polite" className="mb-12 bg-foreground p-6 text-background sm:p-8">
+      <p className="text-2xl font-semibold tracking-[-0.02em]">
+        {fee > 0 && !paid ? 'Your team’s place is held. Payment is pending.' : 'Your team’s place is confirmed.'}
+      </p>
+      <p className="mt-2 max-w-[52ch] text-background/70">
+        {lead} registered team <span className="font-semibold text-background">{membership.teamName}</span> with your
+        register number, so you don&rsquo;t need to register again.
+        {fee > 0 && !paid && ` ${lead} pays the team fee from their account.`}
+      </p>
+      <div className="mt-6 border-t border-background/20 pt-4">
+        <p className="label text-background/60">Team</p>
+        <p className="mt-1 text-lg font-semibold">{membership.teamName}</p>
+        <ol className="mt-3 space-y-1.5 text-sm">
+          {roster.map((m, i) => (
+            <li key={i} className="flex items-baseline justify-between gap-4">
+              <span className="min-w-0 truncate">{m.name}</span>
+              {m.note && <span className="shrink-0 text-background/60">{m.note}</span>}
+            </li>
+          ))}
+        </ol>
+      </div>
+      <div className="mt-6 flex flex-col gap-2 sm:flex-row">
+        <a
+          href={calendarUrl(event)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group inline-flex h-12 items-center justify-between gap-6 bg-primary px-5 font-semibold text-primary-foreground transition-colors hover:bg-background hover:text-foreground"
+        >
+          Add to calendar
+          <CalendarPlus className="size-5" />
+        </a>
+        <Link
+          href={`/events/${event.id}`}
+          className="group inline-flex h-12 items-center justify-between gap-6 border border-background/30 px-5 font-semibold transition-colors hover:bg-background hover:text-foreground"
+        >
+          Back to the event
+          <ArrowUpRight className="size-5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+        </Link>
+      </div>
+      <p className="mt-5 text-sm text-background/60">
+        Not your team? Tell {lead} or an ACE admin so they can correct the register number.
+      </p>
+    </section>
   );
 }
 

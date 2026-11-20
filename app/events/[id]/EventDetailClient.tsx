@@ -9,6 +9,7 @@ import type { Tables } from '@/lib/supabase/database.types';
 import { createClient } from '@/lib/supabase/client';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { participationLabel } from '@/lib/event-display';
+import { fetchTeamMemberships } from '@/lib/team-membership';
 
 export type ParticipantWithPoints = Tables<'PublicUserProfile'> & {
   points: number | null;
@@ -52,8 +53,12 @@ export default function EventDetailClient({ initialEvent, initialParticipants, e
       .eq('userId', authUser.id)
       .eq('eventId', eventId)
       .maybeSingle()
-      .then(({ data, error }) => {
-        if (!error) setIsRegistered(!!data);
+      .then(async ({ data, error }) => {
+        if (error) return;
+        if (data) return setIsRegistered(true);
+        // Not the lead: a teammate may have registered them by register number.
+        const teams = await fetchTeamMemberships(supabase, authUser.id, eventId);
+        setIsRegistered(teams.length > 0);
       });
   }, [authUser, supabase, authLoading, eventId]);
 

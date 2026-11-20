@@ -23,7 +23,10 @@ type SupabaseEvent = Tables<'Event'> & {
   endTime?: string | null;
 };
 
-const UpcomingEventItem = ({ event }: { event: SupabaseEvent }) => {
+export type MyRegistration = { kind: 'self' } | { kind: 'team'; teamName: string; leadName: string | null };
+export type MyRegistrations = Record<string, MyRegistration>;
+
+const UpcomingEventItem = ({ event, mine }: { event: SupabaseEvent; mine?: MyRegistration }) => {
   const supabaseClient = createClient();
 
   const [currentUser, setCurrentUser] = useState<any>(null);
@@ -58,15 +61,6 @@ const UpcomingEventItem = ({ event }: { event: SupabaseEvent }) => {
     if (!event.endTime) return false;
     return new Date() > new Date(event.endTime);
   };
-
-  const typeBadgeClasses = {
-    CONTEST: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
-    WORKSHOP: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
-    TALK: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
-    DEFAULT: 'bg-gray-100 text-gray-700 dark:bg-gray-700/40 dark:text-gray-300',
-  };
-
-  const badgeClass = typeBadgeClasses[event.type] || typeBadgeClasses.DEFAULT;
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -143,6 +137,22 @@ const UpcomingEventItem = ({ event }: { event: SupabaseEvent }) => {
               >
                 Give feedback
               </button>
+            ) : mine ? (
+              <>
+                {mine.kind === 'team' && (
+                  <p className="mb-3 border-l border-primary pl-3 text-sm">
+                    <span className="font-semibold">Team {mine.teamName}</span>
+                    {mine.leadName && <span className="text-muted-foreground"> · added by {mine.leadName}</span>}
+                  </p>
+                )}
+                <Link
+                  href={`/events/${event.id}/register`}
+                  className="group/cta inline-flex h-12 w-full items-center justify-between border border-foreground px-5 font-semibold transition-colors hover:bg-foreground hover:text-background"
+                >
+                  {mine.kind === 'team' ? 'Your team is registered' : 'You’re registered'}
+                  <ArrowRight className="size-5 transition-transform group-hover/cta:translate-x-1" />
+                </Link>
+              </>
             ) : (
               <Link
                 href={`/events/${event.id}/register`}
@@ -169,7 +179,7 @@ const UpcomingEventItem = ({ event }: { event: SupabaseEvent }) => {
   );
 };
 
-export default function UpcomingEventsClientView({ events }: { events: SupabaseEvent[] }) {
+export default function UpcomingEventsClientView({ events, mine = {} }: { events: SupabaseEvent[]; mine?: MyRegistrations }) {
   const pageVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { duration: 0.5 } },
@@ -214,7 +224,7 @@ export default function UpcomingEventsClientView({ events }: { events: SupabaseE
           animate="visible"
         >
           {events.map((event) => (
-            <UpcomingEventItem key={event.id} event={event} />
+            <UpcomingEventItem key={event.id} event={event} mine={mine[event.id]} />
           ))}
         </motion.div>
       ) : (
@@ -224,7 +234,7 @@ export default function UpcomingEventsClientView({ events }: { events: SupabaseE
           </p>
           <div className="lg:col-span-4 lg:col-start-9 lg:self-end">
             <p className="text-lg leading-snug text-muted-foreground">
-              New events land here first. Sign in so your registrations, attendance and badges are tracked when they do.
+              New events land here first. Sign in so your registrations and attendance are tracked when they do.
             </p>
             <Link
               href="/events"

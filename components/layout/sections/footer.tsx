@@ -7,7 +7,7 @@ const site = [
   { href: "/clusters", label: "Clusters" },
   { href: "/events", label: "Events" },
   { href: "/events/upcoming", label: "Upcoming" },
-  { href: "/badges", label: "Badges" },
+  { href: "/products", label: "Products" },
 ];
 
 const social = [
