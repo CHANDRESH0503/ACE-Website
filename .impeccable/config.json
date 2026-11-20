@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "gradient-text",
+        "value": "*",
+        "files": [
+          "app/globals.css"
+        ],
+        "createdAt": "2026-11-15T13:26:30.317Z",
+        "reason": "Only gradient text is .sheen-text on the In-action word, mirroring the metallic 'WORK' word on madetodisrupt.com, the reference the user pinned for the landing page"
+      }
+    ]
+  }
+}

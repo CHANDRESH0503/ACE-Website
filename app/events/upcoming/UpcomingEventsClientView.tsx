@@ -1,0 +1,314 @@
+"use client";
+
+import Image from 'next/image';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { CalendarDays, MapPin, Info, Users, DollarSign } from 'lucide-react';
+import { PageHeader } from "@/components/layout/page-header";
+import { motion } from 'framer-motion';
+import type { Tables, Enums } from '@/lib/supabase/database.types';
+import { createClient } from '@/lib/supabase/client';
+import { Card, CardHeader } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { formatEventDate } from '@/lib/utils/date';
+import { PaymentModal } from '@/components/PaymentModal';
+import { FeedbackModal } from '@/components/events/FeedbackModal';
+
+type SupabaseEvent = Tables<'Event'> & {
+  type: Enums<'EventType'>;
+  registrationFee?: number | null;
+  isFeeRequired?: boolean | null;
+  endTime?: string | null;
+};
+
+const UpcomingEventItem = ({ event }: { event: SupabaseEvent }) => {
+  const supabaseClient = createClient();
+
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [registrationId, setRegistrationId] = useState<string | null>(null);
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const { data } = await supabaseClient.auth.getUser();
+      if (data.user) {
+        setCurrentUser(data.user);
+      }
+    };
+    getUser();
+  }, []);
+
+  const formatEventDateTime = (dateString: string): string => {
+    const date = new Date(dateString);
+    const dateOnly = formatEventDate(dateString);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const formattedHours = hours % 12 || 12;
+    const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+
+    return `${dateOnly}, ${formattedHours}:${formattedMinutes} ${ampm}`;
+  };
+
+  const formattedStartTime = event.startTime ? formatEventDateTime(event.startTime) : undefined;
+
+  // NEW: check if the event has ended (feedback only after end)
+  const isEventOver = () => {
+    if (!event.endTime) return false;
+    return new Date() > new Date(event.endTime);
+  };
+
+  const typeBadgeClasses = {
+    CONTEST: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+    WORKSHOP: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
+    TALK: 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
+    DEFAULT: 'bg-gray-100 text-gray-700 dark:bg-gray-700/40 dark:text-gray-300',
+  };
+
+  const badgeClass = typeBadgeClasses[event.type] || typeBadgeClasses.DEFAULT;
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+  };
+
+  const handleRegisterClick = async () => {
+    if (!currentUser) {
+      alert('Please login to register for events');
+      return;
+    }
+
+    try {
+      setIsRegistering(true);
+
+      const { data: existingReg, error: checkError } = await supabaseClient
+        .from('Registration')
+        .select('id')
+        .eq('eventId', event.id)
+        .eq('userId', currentUser.id)
+        .single();
+
+      if (checkError && checkError.code !== 'PGRST116') {
+        throw checkError;
+      }
+
+      if (existingReg) {
+        // Already registered — if fee is required, let them complete/redo payment
+        if (event.isFeeRequired && event.registrationFee && event.registrationFee > 0) {
+          setRegistrationId(existingReg.id);
+          setShowPaymentModal(true);
+        } else {
+          alert('You are already registered for this event');
+        }
+        return;
+      }
+
+      // Create registration
+      const { data: newReg, error: regError } = await supabaseClient
+        .from('Registration')
+        .insert([
+          {
+            eventId: event.id,
+            userId: currentUser.id,
+          },
+        ])
+        .select('id')
+        .single();
+
+      if (regError) throw regError;
+
+      setRegistrationId(newReg.id);
+
+      // Show payment modal if fee required
+      if (event.isFeeRequired && event.registrationFee && event.registrationFee > 0) {
+        setShowPaymentModal(true);
+      } else {
+        alert('Registration successful!');
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      alert('Failed to register for event');
+    } finally {
+      setIsRegistering(false);
+    }
+  };
+
+  return (
+    <>
+      <article data-fade className="group flex h-full flex-col">
+        <Link href={`/events/${event.id}`} className="block">
+          <div data-clip className="relative aspect-[4/5] overflow-hidden bg-muted">
+            {event.imgUrl ? (
+              <Image
+                src={supabaseClient.storage.from('event-images').getPublicUrl(event.imgUrl).data.publicUrl}
+                alt={`${event.name ?? 'Event'} poster`}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
+              />
+            ) : (
+              <div className="grid h-full place-items-center p-8 text-center font-display text-4xl">{event.name}</div>
+            )}
+            {event.type && <span className="absolute left-3 top-3 bg-background px-2 py-1 label">{event.type}</span>}
+          </div>
+        </Link>
+
+        <div className="flex grow flex-col border-b border-border py-6">
+          {formattedStartTime && <p className="font-mono text-sm tabular text-primary">{formattedStartTime}</p>}
+          <h3 className="mt-3 text-3xl font-extrabold leading-[0.95] tracking-[-0.04em] [font-stretch:110%]">
+            <Link href={`/events/${event.id}`} className="hover:text-primary">
+              {event.name ?? 'Upcoming event'}
+            </Link>
+          </h3>
+          {event.description && <p className="mt-4 line-clamp-3 text-muted-foreground">{event.description.split('\n')[0]}</p>}
+          <dl className="mt-5 grid grid-cols-2 gap-4 border-t border-border pt-4 text-sm">
+            {event.location && (
+              <div>
+                <dt className="label text-muted-foreground">Venue</dt>
+                <dd className="mt-1 font-semibold">{event.location}</dd>
+              </div>
+            )}
+            {event.registrationFee && event.registrationFee > 0 ? (
+              <div>
+                <dt className="label text-muted-foreground">Fee</dt>
+                <dd className="mt-1 font-mono font-semibold tabular">₹{event.registrationFee}</dd>
+              </div>
+            ) : null}
+            {event.organizer_info && (
+              <div className="col-span-2">
+                <dt className="label text-muted-foreground">Led by</dt>
+                <dd className="mt-1 whitespace-pre-line text-muted-foreground">{event.organizer_info}</dd>
+              </div>
+            )}
+          </dl>
+
+          <div className="mt-6">
+            {isEventOver() ? (
+              <button
+                type="button"
+                onClick={() => {
+                  if (!currentUser) {
+                    alert('Please login to give feedback');
+                    return;
+                  }
+                  setShowFeedbackModal(true);
+                }}
+                className="inline-flex h-12 w-full items-center justify-center border border-foreground/30 font-semibold transition-colors hover:border-foreground hover:bg-foreground hover:text-background"
+              >
+                Give feedback
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={handleRegisterClick}
+                disabled={isRegistering}
+                className="inline-flex h-12 w-full items-center justify-between bg-primary px-5 font-semibold text-primary-foreground transition-colors hover:bg-foreground hover:text-background disabled:cursor-wait disabled:opacity-70"
+              >
+                {isRegistering ? 'Registering…' : 'Register now'}
+                <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
+              </button>
+            )}
+          </div>
+        </div>
+      </article>
+
+      {/* PAYMENT MODAL */}
+      {showPaymentModal && registrationId && currentUser && (
+        <PaymentModal
+          eventId={event.id}
+          userId={currentUser.id}
+          registrationId={registrationId}
+          amount={event.registrationFee || 0}
+          eventName={event.name || 'Event'}
+          userName={currentUser.user_metadata?.name || currentUser.email}
+          userEmail={currentUser.email || ''}
+          onClose={() => setShowPaymentModal(false)}
+        />
+      )}
+
+      {/* FEEDBACK MODAL */}
+      {showFeedbackModal && currentUser && (
+        <FeedbackModal
+          eventId={event.id}
+          userId={currentUser.id}
+          eventName={event.name || 'Event'}
+          onClose={() => setShowFeedbackModal(false)}
+        />
+      )}
+    </>
+  );
+};
+
+export default function UpcomingEventsClientView({ events }: { events: SupabaseEvent[] }) {
+  const pageVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 0.5 } },
+  };
+
+  const titleVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.2 } },
+  };
+
+  const gridVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        delay: 0.4,
+        staggerChildren: 0.15,
+        when: "beforeChildren",
+      },
+    },
+  };
+
+  const noEventsVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, delay: 0.5 } },
+  };
+
+  return (
+    <motion.div
+      className="mx-auto max-w-[1600px] px-5 pb-24 sm:px-8 sm:pb-36"
+      initial="hidden"
+      animate="visible"
+      variants={pageVariants}
+    >
+      <PageHeader title="Upcoming" description="Open events you can register for now. Pick one to see the details and save your seat." />
+
+      {events && events.length > 0 ? (
+        <motion.div
+          className="grid grid-cols-1 gap-x-8 gap-y-16 md:grid-cols-2 lg:grid-cols-3"
+          variants={gridVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {events.map((event) => (
+            <UpcomingEventItem key={event.id} event={event} />
+          ))}
+        </motion.div>
+      ) : (
+        <div className="grid gap-10 border-y border-border py-16 lg:grid-cols-12 lg:py-24">
+          <p className="text-[clamp(2rem,4.5vw,4rem)] font-extrabold leading-[0.95] tracking-[-0.04em] [font-stretch:110%] lg:col-span-7">
+            Nothing is open for registration right now.
+          </p>
+          <div className="lg:col-span-4 lg:col-start-9 lg:self-end">
+            <p className="text-lg leading-snug text-muted-foreground">
+              New events land here first. Sign in so your registrations, attendance and badges are tracked when they do.
+            </p>
+            <Link
+              href="/events"
+              className="group mt-6 inline-flex h-14 items-center gap-8 bg-primary px-6 font-semibold text-primary-foreground transition-colors hover:bg-foreground hover:text-background"
+            >
+              Browse past events
+              <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+        </div>
+      )}
+    </motion.div>
+  );
+}

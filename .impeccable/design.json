@@ -1,0 +1,609 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-15T12:34:57+00:00",
+  "title": "Design System: ACE SASTRA",
+  "extensions": {
+    "colorMeta": {
+      "ink-deep": {
+        "role": "neutral",
+        "displayName": "Ink Deep",
+        "canonical": "hsl(225 22% 4%)",
+        "cssVar": "--background (.dark)",
+        "mode": "dark",
+        "tonalRamp": [
+          "hsl(225 12% 15%)",
+          "hsl(225 18% 25%)",
+          "hsl(225 22% 35%)",
+          "hsl(225 22% 45%)",
+          "hsl(225 22% 55%)",
+          "hsl(225 22% 65%)",
+          "hsl(225 18% 80%)",
+          "hsl(225 12% 95%)"
+        ]
+      },
+      "ink-raised": {
+        "role": "neutral",
+        "displayName": "Ink Raised",
+        "canonical": "hsl(225 16% 7%)",
+        "cssVar": "--card (.dark)",
+        "mode": "dark",
+        "tonalRamp": [
+          "hsl(225 9% 15%)",
+          "hsl(225 13% 25%)",
+          "hsl(225 16% 35%)",
+          "hsl(225 16% 45%)",
+          "hsl(225 16% 55%)",
+          "hsl(225 16% 65%)",
+          "hsl(225 13% 80%)",
+          "hsl(225 9% 95%)"
+        ]
+      },
+      "bone-text": {
+        "role": "neutral",
+        "displayName": "Bone Text",
+        "canonical": "hsl(50 12% 92%)",
+        "cssVar": "--foreground (.dark)",
+        "mode": "dark",
+        "tonalRamp": [
+          "hsl(50 7% 15%)",
+          "hsl(50 10% 25%)",
+          "hsl(50 12% 35%)",
+          "hsl(50 12% 45%)",
+          "hsl(50 12% 55%)",
+          "hsl(50 12% 65%)",
+          "hsl(50 10% 80%)",
+          "hsl(50 7% 95%)"
+        ]
+      },
+      "stone": {
+        "role": "neutral",
+        "displayName": "Stone",
+        "canonical": "hsl(48 6% 64%)",
+        "cssVar": "--muted-foreground (.dark)",
+        "mode": "dark",
+        "tonalRamp": [
+          "hsl(48 3% 15%)",
+          "hsl(48 5% 25%)",
+          "hsl(48 6% 35%)",
+          "hsl(48 6% 45%)",
+          "hsl(48 6% 55%)",
+          "hsl(48 6% 65%)",
+          "hsl(48 5% 80%)",
+          "hsl(48 3% 95%)"
+        ]
+      },
+      "rule-dark": {
+        "role": "neutral",
+        "displayName": "Rule Dark",
+        "canonical": "hsl(225 8% 17%)",
+        "cssVar": "--border (.dark)",
+        "mode": "dark",
+        "tonalRamp": [
+          "hsl(225 4% 15%)",
+          "hsl(225 6% 25%)",
+          "hsl(225 8% 35%)",
+          "hsl(225 8% 45%)",
+          "hsl(225 8% 55%)",
+          "hsl(225 8% 65%)",
+          "hsl(225 6% 80%)",
+          "hsl(225 4% 95%)"
+        ]
+      },
+      "wash-dark": {
+        "role": "neutral",
+        "displayName": "Wash Dark",
+        "canonical": "hsl(225 12% 11%)",
+        "cssVar": "--muted (.dark)",
+        "mode": "dark",
+        "tonalRamp": [
+          "hsl(225 7% 15%)",
+          "hsl(225 10% 25%)",
+          "hsl(225 12% 35%)",
+          "hsl(225 12% 45%)",
+          "hsl(225 12% 55%)",
+          "hsl(225 12% 65%)",
+          "hsl(225 10% 80%)",
+          "hsl(225 7% 95%)"
+        ]
+      },
+      "ace-blue-bright": {
+        "role": "primary",
+        "displayName": "ACE Blue Bright",
+        "canonical": "hsl(213 100% 60%)",
+        "cssVar": "--primary (.dark)",
+        "mode": "dark",
+        "tonalRamp": [
+          "hsl(213 55% 15%)",
+          "hsl(213 80% 25%)",
+          "hsl(213 100% 35%)",
+          "hsl(213 100% 45%)",
+          "hsl(213 100% 55%)",
+          "hsl(213 100% 65%)",
+          "hsl(213 80% 80%)",
+          "hsl(213 55% 95%)"
+        ]
+      },
+      "bone": {
+        "role": "neutral",
+        "displayName": "Bone",
+        "canonical": "hsl(48 14% 93%)",
+        "cssVar": "--background",
+        "mode": "light",
+        "tonalRamp": [
+          "hsl(48 8% 15%)",
+          "hsl(48 11% 25%)",
+          "hsl(48 14% 35%)",
+          "hsl(48 14% 45%)",
+          "hsl(48 14% 55%)",
+          "hsl(48 14% 65%)",
+          "hsl(48 11% 80%)",
+          "hsl(48 8% 95%)"
+        ]
+      },
+      "bone-raised": {
+        "role": "neutral",
+        "displayName": "Bone Raised",
+        "canonical": "hsl(48 16% 96%)",
+        "cssVar": "--card",
+        "mode": "light",
+        "tonalRamp": [
+          "hsl(48 9% 15%)",
+          "hsl(48 13% 25%)",
+          "hsl(48 16% 35%)",
+          "hsl(48 16% 45%)",
+          "hsl(48 16% 55%)",
+          "hsl(48 16% 65%)",
+          "hsl(48 13% 80%)",
+          "hsl(48 9% 95%)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "hsl(225 22% 6%)",
+        "cssVar": "--foreground",
+        "mode": "light",
+        "tonalRamp": [
+          "hsl(225 12% 15%)",
+          "hsl(225 18% 25%)",
+          "hsl(225 22% 35%)",
+          "hsl(225 22% 45%)",
+          "hsl(225 22% 55%)",
+          "hsl(225 22% 65%)",
+          "hsl(225 18% 80%)",
+          "hsl(225 12% 95%)"
+        ]
+      },
+      "graphite": {
+        "role": "neutral",
+        "displayName": "Graphite",
+        "canonical": "hsl(225 6% 36%)",
+        "cssVar": "--muted-foreground",
+        "mode": "light",
+        "tonalRamp": [
+          "hsl(225 3% 15%)",
+          "hsl(225 5% 25%)",
+          "hsl(225 6% 35%)",
+          "hsl(225 6% 45%)",
+          "hsl(225 6% 55%)",
+          "hsl(225 6% 65%)",
+          "hsl(225 5% 80%)",
+          "hsl(225 3% 95%)"
+        ]
+      },
+      "rule-light": {
+        "role": "neutral",
+        "displayName": "Rule Light",
+        "canonical": "hsl(48 6% 78%)",
+        "cssVar": "--border",
+        "mode": "light",
+        "tonalRamp": [
+          "hsl(48 3% 15%)",
+          "hsl(48 5% 25%)",
+          "hsl(48 6% 35%)",
+          "hsl(48 6% 45%)",
+          "hsl(48 6% 55%)",
+          "hsl(48 6% 65%)",
+          "hsl(48 5% 80%)",
+          "hsl(48 3% 95%)"
+        ]
+      },
+      "wash-light": {
+        "role": "neutral",
+        "displayName": "Wash Light",
+        "canonical": "hsl(48 10% 88%)",
+        "cssVar": "--muted",
+        "mode": "light",
+        "tonalRamp": [
+          "hsl(48 6% 15%)",
+          "hsl(48 8% 25%)",
+          "hsl(48 10% 35%)",
+          "hsl(48 10% 45%)",
+          "hsl(48 10% 55%)",
+          "hsl(48 10% 65%)",
+          "hsl(48 8% 80%)",
+          "hsl(48 6% 95%)"
+        ]
+      },
+      "ace-blue": {
+        "role": "primary",
+        "displayName": "ACE Blue",
+        "canonical": "hsl(213 100% 42%)",
+        "cssVar": "--primary",
+        "mode": "light",
+        "tonalRamp": [
+          "hsl(213 55% 15%)",
+          "hsl(213 80% 25%)",
+          "hsl(213 100% 35%)",
+          "hsl(213 100% 45%)",
+          "hsl(213 100% 55%)",
+          "hsl(213 100% 65%)",
+          "hsl(213 80% 80%)",
+          "hsl(213 55% 95%)"
+        ]
+      },
+      "signal-blue": {
+        "role": "primary",
+        "displayName": "Signal Blue",
+        "canonical": "hsl(213 100% 50%)",
+        "cssVar": "--signal",
+        "mode": "both",
+        "tonalRamp": [
+          "hsl(213 55% 15%)",
+          "hsl(213 80% 25%)",
+          "hsl(213 100% 35%)",
+          "hsl(213 100% 45%)",
+          "hsl(213 100% 55%)",
+          "hsl(213 100% 65%)",
+          "hsl(213 80% 80%)",
+          "hsl(213 55% 95%)"
+        ]
+      },
+      "signal-ink": {
+        "role": "neutral",
+        "displayName": "Signal Ink",
+        "canonical": "hsl(225 30% 4%)",
+        "cssVar": "--signal-foreground",
+        "mode": "both",
+        "tonalRamp": [
+          "hsl(225 16% 15%)",
+          "hsl(225 24% 25%)",
+          "hsl(225 30% 35%)",
+          "hsl(225 30% 45%)",
+          "hsl(225 30% 55%)",
+          "hsl(225 30% 65%)",
+          "hsl(225 24% 80%)",
+          "hsl(225 16% 95%)"
+        ]
+      },
+      "paper-white": {
+        "role": "neutral",
+        "displayName": "Paper White",
+        "canonical": "hsl(0 0% 100%)",
+        "cssVar": "--primary-foreground",
+        "mode": "light",
+        "tonalRamp": [
+          "hsl(0 0% 15%)",
+          "hsl(0 0% 25%)",
+          "hsl(0 0% 35%)",
+          "hsl(0 0% 45%)",
+          "hsl(0 0% 55%)",
+          "hsl(0 0% 65%)",
+          "hsl(0 0% 80%)",
+          "hsl(0 0% 95%)"
+        ]
+      },
+      "alarm-red": {
+        "role": "error",
+        "displayName": "Alarm Red",
+        "canonical": "hsl(4 78% 48%)",
+        "cssVar": "--destructive",
+        "mode": "light",
+        "tonalRamp": [
+          "hsl(4 43% 15%)",
+          "hsl(4 62% 25%)",
+          "hsl(4 78% 35%)",
+          "hsl(4 78% 45%)",
+          "hsl(4 78% 55%)",
+          "hsl(4 78% 65%)",
+          "hsl(4 62% 80%)",
+          "hsl(4 43% 95%)"
+        ]
+      },
+      "alarm-red-bright": {
+        "role": "error",
+        "displayName": "Alarm Red Bright",
+        "canonical": "hsl(4 80% 58%)",
+        "cssVar": "--destructive (.dark)",
+        "mode": "dark",
+        "tonalRamp": [
+          "hsl(4 44% 15%)",
+          "hsl(4 64% 25%)",
+          "hsl(4 80% 35%)",
+          "hsl(4 80% 45%)",
+          "hsl(4 80% 55%)",
+          "hsl(4 80% 65%)",
+          "hsl(4 64% 80%)",
+          "hsl(4 44% 95%)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Section and hero headlines, split into masked reveal lines; Archivo 800 at width 112% (100% for the phone hero)."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Ruled-list row titles (clusters, focus areas, principles) and the mobile menu."
+      },
+      "manifesto": {
+        "displayName": "Manifesto",
+        "purpose": "The scroll-scrubbed statement paragraph, max 22ch."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Event names, team names, sub-heads."
+      },
+      "body-lead": {
+        "displayName": "Body Lead",
+        "purpose": "Section intros beside display heads."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Descriptions and answers, max 60-65ch, usually muted."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Uppercase captions, field labels, corner data and small links. Never an eyebrow above a headline."
+      },
+      "data": {
+        "displayName": "Data",
+        "purpose": "JetBrains Mono for dates, times, coordinates and counts only."
+      }
+    },
+    "shadows": [
+      {
+        "name": "emblem-float",
+        "value": "0 30px 60px -20px rgba(2,16,55,0.6)",
+        "purpose": "Only under the circular cursor-follow cluster emblem on the blue field."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-expo",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The system easing for every reveal, hover slide and state transition."
+      },
+      {
+        "name": "ease-wipe",
+        "value": "cubic-bezier(0.76, 0, 0.24, 1)",
+        "purpose": "Full-screen clip-path wipes: preloader exit (1000ms) and mobile menu (700ms)."
+      },
+      {
+        "name": "reveal-line",
+        "value": "transform translateY(125%) -> 0, 1.1s ease-expo, 70ms stagger per line",
+        "purpose": "Masked line reveal for display headlines."
+      },
+      {
+        "name": "fade-blur",
+        "value": "opacity 0 / blur(8px) / translateY(24px) -> rest; opacity+filter 1s, transform 1.2s ease-expo; delay var(--d)",
+        "purpose": "Blur-up entrance for paragraphs, list rows and blocks."
+      },
+      {
+        "name": "clip-reveal",
+        "value": "clip-path inset(100% 0 0 0) -> inset(0) 1.4s; img scale 1.25 -> 1 over 1.8s ease-expo",
+        "purpose": "Photograph entrance."
+      },
+      {
+        "name": "hero-fade",
+        "value": "opacity + translateY(16px), 1s/1.2s ease-expo, staggered delays .15s-.85s",
+        "purpose": "Hero corner data, intro, actions after the preloader."
+      },
+      {
+        "name": "preloader",
+        "value": "counter 000->100 over 1600ms cubic-out, then 1000ms ease-wipe upward",
+        "purpose": "Once per session; skipped on repeat visits and reduced motion."
+      },
+      {
+        "name": "lenis",
+        "value": "duration 1.15s, easing 1.001 - 2^(-10t)",
+        "purpose": "Site-wide smooth scroll and anchor routing; disabled under reduced motion."
+      },
+      {
+        "name": "hover-slide",
+        "value": "translateX(8-16px), 500-700ms ease-expo",
+        "purpose": "Ruled-list row headline on hover."
+      },
+      {
+        "name": "rule-grow",
+        "value": "1px ACE Blue line scaleX 0 -> 1 or width 0 -> 100%, 700ms ease-expo",
+        "purpose": "Row hover / focus-list active rule, nav active underline (500ms)."
+      },
+      {
+        "name": "button-invert",
+        "value": "background/color 300ms; arrow translate 4px; active scale 0.98",
+        "purpose": "Button hover and press."
+      },
+      {
+        "name": "cursor-follow",
+        "value": "lerp 0.16 per frame, tilt clamp +/-14deg from velocity; emblem circle clip 0% -> 50%, 500ms ease-expo",
+        "purpose": "Cluster emblem following the cursor on the blue field (fine pointers only)."
+      },
+      {
+        "name": "scrub-text",
+        "value": "word opacity 0.16 -> 1 across viewport 85% -> 45%",
+        "purpose": "Manifesto paragraph."
+      },
+      {
+        "name": "marquee",
+        "value": "translateX 0 -> -50%, 38-40s linear infinite",
+        "purpose": "Outlined event-format words."
+      },
+      {
+        "name": "live-pulse",
+        "value": "opacity 1 -> 0.35 -> 1, 1.6s ease-in-out infinite",
+        "purpose": "Live dot beside an open event."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "prefers-reduced-motion: reduce",
+        "purpose": "Disables Lenis, reveals, fades, clip, marquee, pulse and particle animation; content is visible by default without JS."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      },
+      {
+        "name": "2xl",
+        "value": "1536px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Square 56px ACE Blue slab, label left and arrow right; inverts to ink on hover.",
+      "html": "<button class=\"ds-btn-primary\">Sign in with SASTRA <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button>",
+      "css": ".ds-btn-primary { display:inline-flex; align-items:center; justify-content:space-between; gap:24px; min-width:16rem; height:56px; padding:0 24px; border:0; border-radius:0; background:hsl(var(--primary)); color:hsl(var(--primary-foreground)); font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif; font-size:1rem; font-weight:600; cursor:pointer; transition:background-color .3s, color .3s, transform .3s; } .ds-btn-primary svg { transition:transform .3s; } .ds-btn-primary:hover { background:hsl(var(--foreground)); color:hsl(var(--background)); } .ds-btn-primary:hover svg { transform:translateX(4px); } .ds-btn-primary:active { transform:scale(.98); } .ds-btn-primary:focus-visible { outline:2px solid hsl(var(--ring)); outline-offset:3px; }"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Square 56px hairline button; fills with ink on hover.",
+      "html": "<a href=\"#\" class=\"ds-btn-outline\">Upcoming events <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 7h10v10\"/><path d=\"M7 17 17 7\"/></svg></a>",
+      "css": ".ds-btn-outline { display:inline-flex; align-items:center; justify-content:space-between; gap:24px; min-width:14rem; height:56px; padding:0 24px; border:1px solid hsl(var(--foreground) / .25); border-radius:0; background:transparent; color:hsl(var(--foreground)); font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif; font-size:1rem; font-weight:600; text-decoration:none; transition:background-color .3s, color .3s, border-color .3s; } .ds-btn-outline svg { transition:transform .3s; } .ds-btn-outline:hover { border-color:hsl(var(--foreground)); background:hsl(var(--foreground)); color:hsl(var(--background)); } .ds-btn-outline:hover svg { transform:translate(2px,-2px); } .ds-btn-outline:focus-visible { outline:2px solid hsl(var(--ring)); outline-offset:3px; }"
+    },
+    {
+      "name": "Signal Field Button",
+      "kind": "button",
+      "refersTo": "button-on-signal",
+      "description": "48px signal-ink slab used on the drenched blue field; turns white on hover.",
+      "html": "<div class=\"ds-signal-field\"><a href=\"#\" class=\"ds-btn-signal\">See recruitment <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></a></div>",
+      "css": ".ds-signal-field { background:hsl(var(--signal)); padding:32px; } .ds-btn-signal { display:inline-flex; align-items:center; gap:16px; height:48px; padding:0 20px; border-radius:0; background:hsl(var(--signal-foreground)); color:hsl(var(--signal)); font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif; font-weight:600; text-decoration:none; transition:background-color .15s, color .15s; } .ds-btn-signal svg { transition:transform .15s; } .ds-btn-signal:hover { background:#fff; color:hsl(var(--signal-foreground)); } .ds-btn-signal:hover svg { transform:translateX(4px); } .ds-btn-signal:focus-visible { outline:2px solid hsl(var(--signal-foreground)); outline-offset:3px; }"
+    },
+    {
+      "name": "Navigation Bar",
+      "kind": "nav",
+      "refersTo": "nav-bar",
+      "description": "64px bar with muted links, a 1px blue active underline and a square ink auth slab.",
+      "html": "<header class=\"ds-nav\"><a href=\"#\" class=\"ds-nav-brand\">ACE <span class=\"ds-nav-sub\">/ SASTRA SoC</span></a><nav><a href=\"#\" class=\"ds-nav-link is-active\" aria-current=\"page\">Home</a><a href=\"#\" class=\"ds-nav-link\">Events</a><a href=\"#\" class=\"ds-nav-link\">Clusters</a><a href=\"#\" class=\"ds-nav-link\">Team</a></nav><button class=\"ds-nav-auth\">Sign in</button></header>",
+      "css": ".ds-nav { display:flex; align-items:center; justify-content:space-between; gap:24px; height:64px; padding:0 32px; background:hsl(var(--background)); border-bottom:1px solid hsl(var(--border)); font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif; } .ds-nav-brand { font-weight:700; letter-spacing:-0.02em; color:hsl(var(--foreground)); text-decoration:none; } .ds-nav-sub { font-size:11.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:hsl(var(--muted-foreground)); margin-left:8px; } .ds-nav-link { position:relative; padding:8px 12px; font-size:14px; font-weight:500; color:hsl(var(--muted-foreground)); text-decoration:none; transition:color .2s; } .ds-nav-link::after { content:''; position:absolute; left:12px; right:12px; bottom:-2px; height:1px; background:hsl(var(--primary)); transform:scaleX(0); transform-origin:left; transition:transform .5s cubic-bezier(0.16,1,0.3,1); } .ds-nav-link:hover, .ds-nav-link.is-active { color:hsl(var(--foreground)); } .ds-nav-link.is-active::after { transform:scaleX(1); } .ds-nav-link:focus-visible { outline:2px solid hsl(var(--ring)); outline-offset:3px; } .ds-nav-auth { height:40px; padding:0 16px; border:0; border-radius:0; background:hsl(var(--foreground)); color:hsl(var(--background)); font:inherit; font-size:14px; font-weight:600; cursor:pointer; transition:background-color .2s, color .2s; } .ds-nav-auth:hover { background:hsl(var(--primary)); color:hsl(var(--primary-foreground)); }"
+    },
+    {
+      "name": "Ruled Event Row",
+      "kind": "custom",
+      "refersTo": "ruled-row",
+      "description": "Ruled list row: mono date column, blue type label, sliding title, diagonal arrow.",
+      "html": "<ul class=\"ds-ruled\"><li><a href=\"#\" class=\"ds-row\"><span class=\"ds-row-date\"><span class=\"ds-row-day\">14</span><span class=\"ds-row-month\">NOV</span></span><span class=\"ds-row-type\">Workshop</span><span class=\"ds-row-main\"><span class=\"ds-row-title\">Intro to Rust</span><span class=\"ds-row-meta\">FRI 17:30 IST · SoC Lab 2</span></span><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 7h10v10\"/><path d=\"M7 17 17 7\"/></svg></a></li><li><a href=\"#\" class=\"ds-row\"><span class=\"ds-row-date\"><span class=\"ds-row-day\">21</span><span class=\"ds-row-month\">NOV</span></span><span class=\"ds-row-type\">Contest</span><span class=\"ds-row-main\"><span class=\"ds-row-title\">Weekly contest</span><span class=\"ds-row-meta\">FRI 18:00 IST · Online</span></span><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 7h10v10\"/><path d=\"M7 17 17 7\"/></svg></a></li></ul>",
+      "css": ".ds-ruled { list-style:none; margin:0; padding:0; border-top:1px solid hsl(var(--border)); font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif; color:hsl(var(--foreground)); } .ds-ruled li { border-bottom:1px solid hsl(var(--border)); } .ds-row { display:grid; grid-template-columns:4.5rem 7rem 1fr auto; align-items:center; gap:32px; padding:24px 0; color:inherit; text-decoration:none; } .ds-row-date { font-family:var(--font-jetbrains), ui-monospace, monospace; font-variant-numeric:tabular-nums; line-height:1; } .ds-row-day { display:block; font-size:2.25rem; font-weight:500; } .ds-row-month { display:block; margin-top:4px; font-size:11px; letter-spacing:.1em; color:hsl(var(--muted-foreground)); } .ds-row-type { font-size:11.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:hsl(var(--primary)); } .ds-row-main { min-width:0; } .ds-row-title { display:block; font-size:1.5rem; font-weight:600; letter-spacing:-0.02em; transition:transform .5s cubic-bezier(0.16,1,0.3,1); } .ds-row-meta { display:block; margin-top:4px; font-family:var(--font-jetbrains), ui-monospace, monospace; font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:hsl(var(--muted-foreground)); } .ds-row svg { width:24px; height:24px; transition:transform .3s; } .ds-row:hover .ds-row-title { transform:translateX(8px); } .ds-row:hover svg { transform:translate(4px,-4px); } .ds-row:focus-visible { outline:2px solid hsl(var(--ring)); outline-offset:-2px; }"
+    },
+    {
+      "name": "Cluster Row on Signal Field",
+      "kind": "custom",
+      "refersTo": "ruled-row",
+      "description": "Headline-scale ruled row on the blue field; siblings recede to 40% and a blue rule never appears here (signal-ink hairlines instead).",
+      "html": "<div class=\"ds-field\"><ul class=\"ds-clist\"><li><a href=\"#\" class=\"ds-crow\"><span class=\"ds-crow-title\">Web Development</span><span class=\"ds-crow-desc\">Builds and ships the club's web products.</span><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 7h10v10\"/><path d=\"M7 17 17 7\"/></svg></a></li><li><a href=\"#\" class=\"ds-crow\"><span class=\"ds-crow-title\">Cyber Security</span><span class=\"ds-crow-desc\">Runs CTFs and security workshops.</span><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 7h10v10\"/><path d=\"M7 17 17 7\"/></svg></a></li></ul></div>",
+      "css": ".ds-field { background:hsl(var(--signal)); color:hsl(var(--signal-foreground)); padding:32px; font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif; } .ds-clist { list-style:none; margin:0; padding:0; border-top:1px solid hsl(var(--signal-foreground) / .3); } .ds-clist li { border-bottom:1px solid hsl(var(--signal-foreground) / .3); } .ds-crow { display:grid; grid-template-columns:1fr minmax(0,24rem) auto; align-items:center; gap:40px; padding:20px 0; color:inherit; text-decoration:none; } .ds-crow-title { font-size:clamp(1.6rem,4.6vw,4.25rem); font-weight:700; line-height:1; letter-spacing:-0.04em; font-stretch:110%; transition:transform .5s cubic-bezier(0.16,1,0.3,1), opacity .5s cubic-bezier(0.16,1,0.3,1); } .ds-crow-desc { font-size:14px; line-height:1.375; } .ds-crow svg { width:32px; height:32px; transition:transform .3s; } .ds-clist:hover .ds-crow-title { opacity:.4; } .ds-clist .ds-crow:hover .ds-crow-title { opacity:1; transform:translateX(16px); } .ds-crow:hover svg { transform:translate(4px,-4px); } .ds-crow:focus-visible { outline:2px solid hsl(var(--signal-foreground)); outline-offset:-2px; }"
+    },
+    {
+      "name": "Underline Field",
+      "kind": "input",
+      "refersTo": "input-underline",
+      "description": "Underline-only input on the inverted contact panel; label voice above, blue underline on focus.",
+      "html": "<div class=\"ds-panel\"><label for=\"ds-email\" class=\"ds-field-label\">Email</label><input id=\"ds-email\" class=\"ds-input\" type=\"email\" placeholder=\"you@sastra.ac.in\"></div>",
+      "css": ".ds-panel { background:hsl(var(--foreground)); color:hsl(var(--background)); padding:32px; font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif; } .ds-field-label { display:block; font-size:11.5px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:hsl(var(--background) / .6); } .ds-input { width:100%; border:0; border-bottom:1px solid hsl(var(--background) / .3); border-radius:0; background:transparent; padding:8px 0 12px; font:inherit; font-size:1.125rem; color:hsl(var(--background)); outline:none; transition:border-color .15s; caret-color:hsl(var(--primary)); } .ds-input::placeholder { color:hsl(var(--background) / .4); } .ds-input:focus { border-bottom-color:hsl(var(--primary)); } .ds-input[aria-invalid=true] { border-bottom-color:hsl(var(--destructive)); }"
+    },
+    {
+      "name": "Accordion Row",
+      "kind": "custom",
+      "refersTo": "ruled-row",
+      "description": "FAQ item as a ruled row; plus glyph rotates to an X in ACE Blue when open.",
+      "html": "<details class=\"ds-acc\" open><summary>Who can join ACE? <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"M12 5v14\"/></svg></summary><p>Any School of Computing student at SASTRA can apply during recruitment.</p></details><details class=\"ds-acc\"><summary>Can I join more than one cluster? <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"M12 5v14\"/></svg></summary><p>Yes, if your eligibility allows it and your work keeps up.</p></details>",
+      "css": ".ds-acc { border-bottom:1px solid hsl(var(--border)); font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif; color:hsl(var(--foreground)); } .ds-acc summary { display:flex; align-items:center; justify-content:space-between; gap:24px; padding:24px 0; font-size:1.25rem; font-weight:600; cursor:pointer; list-style:none; transition:color .15s; } .ds-acc summary::-webkit-details-marker { display:none; } .ds-acc summary:hover { color:hsl(var(--primary)); } .ds-acc summary svg { flex-shrink:0; transition:transform .5s cubic-bezier(0.16,1,0.3,1); } .ds-acc[open] summary svg { transform:rotate(45deg); color:hsl(var(--primary)); } .ds-acc summary:focus-visible { outline:2px solid hsl(var(--ring)); outline-offset:3px; } .ds-acc p { margin:0; padding:0 40px 24px 0; max-width:65ch; font-size:1rem; line-height:1.625; color:hsl(var(--muted-foreground)); }"
+    },
+    {
+      "name": "Display Headline",
+      "kind": "custom",
+      "refersTo": "",
+      "description": "Two-line display head in Archivo 800 at width 112%, accent on one line.",
+      "html": "<h2 class=\"ds-display\"><span>Show up.</span><span class=\"ds-accent\">Level up.</span></h2>",
+      "css": ".ds-display { margin:0; font-family: var(--font-archivo), ui-sans-serif, system-ui, sans-serif; font-size:clamp(2.75rem,6vw,5.5rem); font-weight:800; font-stretch:112%; letter-spacing:-0.04em; line-height:.88; color:hsl(var(--foreground)); } .ds-display span { display:block; padding-bottom:.14em; margin-bottom:-.14em; } .ds-accent { color:hsl(var(--primary)); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Signal Field",
+    "overview": "ACE is drawn in two materials and one charge. Ink and bone (ink ground in dark mode, inverted to bone in light) carry everything structural; ACE Blue, derived from the logo's blue and pushed electric, is the charge. It marks the one thing that matters on a line, and once per page it floods an entire section as a full-bleed field. The type does the shouting: Archivo's width axis is stretched to 112% at weight 800 and set at viewport scale, with tight negative tracking and lines that nearly touch. Everything else is quiet: 1px hairlines, square corners, generous section rhythm, and small uppercase sans labels.\n\nThe structure is editorial, not app-like. Content sits on a 12-column grid inside a 1600px frame and is organised as ruled lists (rows separated by hairlines) rather than as boxes. Depth comes from inversion and motion, not elevation: an inked panel, a blue field, a masked line rising into place. Motion is expo-out throughout and always degrades to static, fully visible content under reduced motion or without JavaScript.\n\nThe system was built against the stock template it replaced: centred gradient headlines, background video, icon cards and team cards. None of those exist here.",
+    "keyCharacteristics": [
+      "Ink and bone, inverted between dark and light mode; ACE Blue as the single accent.",
+      "One drenched blue field per page (the clusters section on the landing).",
+      "Archivo variable at giant display scale, width axis stretched; JetBrains Mono reserved for data.",
+      "1px hairlines and square corners; no cards, no glass, no gradients.",
+      "Ruled lists as the primary content structure.",
+      "Expo-out motion: masked line reveals, blur-up fades, clip reveals, Lenis smooth scroll."
+    ],
+    "rules": [
+      {
+        "name": "The One Field Rule",
+        "body": "Signal Blue floods at most one full-bleed section per page. Everywhere else blue is a mark on a single word, line or control, never a background wash.",
+        "section": "colors"
+      },
+      {
+        "name": "The Inversion Rule",
+        "body": "Panels gain emphasis by swapping ink and bone (foreground becomes background), never by adding a tint, a gradient or a shadow.",
+        "section": "colors"
+      },
+      {
+        "name": "The Mono Is Data Rule",
+        "body": "JetBrains Mono sets only machine values: dates, times, coordinates, counts. Labels, captions and UI copy stay in Archivo.",
+        "section": "typography"
+      },
+      {
+        "name": "The Two-Line Headline Rule",
+        "body": "Display headlines are short declaratives split into reveal lines (\"Show up. / Level up.\"). The accent, if any, falls on one whole line or word in ACE Blue.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat Field Rule",
+        "body": "Containers, controls and panels never cast shadows. If something needs emphasis, invert it or rule it.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do set structure with 1px hairlines and square corners (0px) on every container and control.",
+      "Do keep ACE Blue to one mark per line or control, and flood Signal Blue across at most one full-bleed section per page.",
+      "Do set display headlines in Archivo 800 at width 112%, tracking -0.04em, line-height 0.88, split into reveal lines.",
+      "Do use JetBrains Mono only for dates, times, coordinates and counts, with tabular figures.",
+      "Do present collections as ruled lists with a leading column, a headline column and a trailing arrow.",
+      "Do ease everything with cubic-bezier(0.16, 1, 0.3, 1), and keep content visible without JavaScript and under reduced motion.",
+      "Do emphasise a panel by inverting ink and bone.",
+      "Do crop cluster emblems to full circles; it is the only curve in the system."
+    ],
+    "donts": [
+      "Don't use cards, glass, backdrop blur or tinted boxes to group content.",
+      "Don't use gradients, including gradient text.",
+      "Don't put small uppercase eyebrows above headlines; the label voice is for captions, fields and data only.",
+      "Don't set labels or UI copy in mono.",
+      "Don't cast shadows from containers, buttons or panels; the emblem float is the only shadow.",
+      "Don't use the 0.375rem radius token on new surfaces.",
+      "Don't use background video or centred hero stacks."
+    ]
+  }
+}
