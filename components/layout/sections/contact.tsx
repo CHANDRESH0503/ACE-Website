@@ -113,10 +113,10 @@ export const ContactSection = () => {
                 <dt className="label text-background/60">Write to us</dt>
                 <dd className="mt-2 text-lg">
                   <a
-                    href="mailto:ace.soc.sastra@gmail.com"
+                    href="mailto:ace.webd@gmail.com"
                     className="underline decoration-background/30 underline-offset-4 transition-colors hover:decoration-primary"
                   >
-                    ace.soc.sastra@gmail.com
+                    ace.webd@gmail.com
                   </a>
                 </dd>
               </div>

@@ -23,6 +23,7 @@ const securityHeaders = [
 const nextConfig = {
   poweredByHeader: false,
   images: {
+    dangerouslyAllowLocalIP: true,
     remotePatterns: [
       {
         protocol: "https",
